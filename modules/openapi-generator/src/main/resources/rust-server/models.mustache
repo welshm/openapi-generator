@@ -137,18 +137,18 @@ impl From<hyper::header::HeaderValue> for header::IntoHeaderValue<{{{classname}}
     }
 }
 
-{{#arrayModelType}}{{#vendorExtensions}}{{#itemXmlName}}// Utility function for wrapping list elements when serializing xml
+{{#arrayModelType}}{{#vendorExtensions}}{{#x-item-xml-name}}// Utility function for wrapping list elements when serializing xml
 #[allow(non_snake_case)]
-fn wrap_in_{{{itemXmlName}}}<S>(item: &Vec<{{{arrayModelType}}}>, serializer: S) -> std::result::Result<S::Ok, S::Error>
+fn wrap_in_{{{x-item-xml-name}}}<S>(item: &Vec<{{{arrayModelType}}}>, serializer: S) -> std::result::Result<S::Ok, S::Error>
 where
     S: serde::ser::Serializer,
 {
-    serde_xml_rs::wrap_primitives(item, serializer, "{{{itemXmlName}}}")
+    serde_xml_rs::wrap_primitives(item, serializer, "{{{x-item-xml-name}}}")
 }
 
-{{/itemXmlName}}{{/vendorExtensions}}{{! vec}}#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+{{/x-item-xml-name}}{{/vendorExtensions}}{{! vec}}#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 #[cfg_attr(feature = "conversion", derive(LabelledGeneric))]
-pub struct {{{classname}}}({{#vendorExtensions}}{{#itemXmlName}}#[serde(serialize_with = "wrap_in_{{{itemXmlName}}}")]{{/itemXmlName}}{{/vendorExtensions}}Vec<{{{arrayModelType}}}>);
+pub struct {{{classname}}}({{#vendorExtensions}}{{#x-item-xml-name}}#[serde(serialize_with = "wrap_in_{{{x-item-xml-name}}}")]{{/x-item-xml-name}}{{/vendorExtensions}}Vec<{{{arrayModelType}}}>);
 
 impl std::convert::From<Vec<{{{arrayModelType}}}>> for {{{classname}}} {
     fn from(x: Vec<{{{arrayModelType}}}>) -> Self {
@@ -242,8 +242,8 @@ impl std::str::FromStr for {{{classname}}} {
 pub struct {{{classname}}} {
 {{#vars}}{{#description}}    /// {{{description}}}
 {{/description}}{{#isEnum}}    // Note: inline enums are not fully supported by openapi-generator
-{{/isEnum}}    #[serde(rename = "{{{baseName}}}")]{{#vendorExtensions}}{{#itemXmlName}}
-    #[serde(serialize_with = "wrap_in_{{{itemXmlName}}}")]{{/itemXmlName}}{{/vendorExtensions}}{{#required}}
+{{/isEnum}}    #[serde(rename = "{{{baseName}}}")]{{#vendorExtensions}}{{#x-item-xml-name}}
+    #[serde(serialize_with = "wrap_in_{{{x-item-xml-name}}}")]{{/x-item-xml-name}}{{/vendorExtensions}}{{#required}}
     pub {{{name}}}: {{#isNullable}}swagger::Nullable<{{/isNullable}}{{{dataType}}}{{#isNullable}}>{{/isNullable}},
 {{/required}}{{^required}}{{#isNullable}}
     #[serde(deserialize_with = "swagger::nullable_format::deserialize_optional_nullable")]
