@@ -138,6 +138,7 @@ public class CSharpNetCoreClientCodegen extends AbstractCSharpCodegen {
         typeMapping.put("object", "Object");
         typeMapping.put("UUID", "Guid");
         typeMapping.put("URI", "string");
+        typeMapping.put("AnyType", "Object");
 
         setSupportNullable(Boolean.TRUE);
         hideGenerationTimestamp = Boolean.TRUE;
@@ -423,10 +424,6 @@ public class CSharpNetCoreClientCodegen extends AbstractCSharpCodegen {
         postProcessEmitDefaultValue(property.vendorExtensions);
 
         super.postProcessModelProperty(model, property);
-
-        if (!property.isContainer && (nullableType.contains(property.dataType) || property.isEnum)) {
-            property.vendorExtensions.put("x-csharp-value-type", true);
-        }
     }
 
     @Override
@@ -461,14 +458,6 @@ public class CSharpNetCoreClientCodegen extends AbstractCSharpCodegen {
         postProcessPattern(parameter.pattern, parameter.vendorExtensions);
         postProcessEmitDefaultValue(parameter.vendorExtensions);
         super.postProcessParameter(parameter);
-
-        if (nullableType.contains(parameter.dataType)) {
-            if (!parameter.required) { //optional
-                parameter.dataType = parameter.dataType + "?";
-            } else {
-                parameter.vendorExtensions.put("x-csharp-value-type", true);
-            }
-        }
     }
 
     /*
